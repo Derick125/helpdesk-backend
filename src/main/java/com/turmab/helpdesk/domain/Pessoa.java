@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -15,10 +14,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.turmab.helpdesk.domain.enums.Perfil;
 
+/**
+ * Classe abstrata que representa uma Pessoa no sistema.
+ * Serve como base para as entidades Cliente e Tecnico, compartilhando atributos comuns.
+ */
 @Entity
 public abstract class Pessoa implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -46,7 +48,7 @@ public abstract class Pessoa implements Serializable {
 
     public Pessoa() {
         super();
-        addPerfil(Perfil.CLIENTE);
+        addPerfil(Perfil.CLIENTE); // Todo usuário é, no mínimo, um cliente
     }
 
     public Pessoa(Integer id, String nome, String cpf, String email, String senha) {

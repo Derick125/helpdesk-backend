@@ -15,6 +15,9 @@ import com.turmab.helpdesk.domain.enums.Status;
 import com.turmab.helpdesk.repositories.ChamadoRepository;
 import com.turmab.helpdesk.resources.exceptions.ObjectNotFoundException;
 
+/**
+ * Serviço para gerenciar as operações de negócio relacionadas a Chamados.
+ */
 @Service
 public class ChamadoService {
 
@@ -25,45 +28,72 @@ public class ChamadoService {
     @Autowired
     private ClienteService clienteService;
 
+    /**
+     * Busca um chamado pelo seu ID.
+     * @param id O ID do chamado.
+     * @return A entidade Chamado encontrada.
+     * @throws ObjectNotFoundException se o chamado não for encontrado.
+     */
     public Chamado findById(Integer id) {
         Optional<Chamado> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! ID: " + id));
     }
 
+    /**
+     * Retorna uma lista com todos os chamados cadastrados.
+     * @return Uma lista de entidades Chamado.
+     */
     public List<Chamado> findAll() {
         return repository.findAll();
     }
 
+    /**
+     * Cria um novo chamado no banco de dados.
+     * @param objDTO O DTO com os dados do novo chamado.
+     * @return A entidade Chamado recém-criada.
+     */
     public Chamado create(@Valid ChamadoDTO objDTO) {
-        return repository.save(newChamado(objDTO));
+        return repository.save(fromDTO(objDTO));
     }
-
+    
+    /**
+     * Atualiza os dados de um chamado existente.
+     * @param id O ID do chamado a ser atualizado.
+     * @param objDTO O DTO com os novos dados.
+     * @return A entidade Chamado atualizada.
+     */
     public Chamado update(Integer id, @Valid ChamadoDTO objDTO) {
         objDTO.setId(id);
-        Chamado oldObj = findById(id);
-        oldObj = newChamado(objDTO);
-        return repository.save(oldObj);
+        findById(id); // Valida se o chamado existe, senão lança exceção
+        Chamado newObj = fromDTO(objDTO);
+        return repository.save(newObj);
     }
 
-    private Chamado newChamado(ChamadoDTO obj) {
-        Tecnico tecnico = tecnicoService.findById(obj.getTecnico());
-        Cliente cliente = clienteService.findById(obj.getCliente());
-
+    /**
+     * Converte um ChamadoDTO em uma entidade Chamado, associando o técnico e o cliente.
+     * @param objDTO O DTO a ser convertido.
+     * @return A entidade Chamado.
+     */
+    private Chamado fromDTO(ChamadoDTO objDTO) {
+        Tecnico tecnico = tecnicoService.findById(objDTO.getTecnico());
+        Cliente cliente = clienteService.findById(objDTO.getCliente());
+        
         Chamado chamado = new Chamado();
-        if(obj.getId() != null) {
-            chamado.setId(obj.getId());
+        if(objDTO.getId() != null) {
+            chamado.setId(objDTO.getId());
         }
-
-        if(obj.getStatus().equals(2)) {
+        
+        // Se o status for "ENCERRADO" (código 2), define a data de fechamento
+        if(objDTO.getStatus().equals(2)) {
             chamado.setDataFechamento(LocalDate.now());
         }
 
         chamado.setTecnico(tecnico);
         chamado.setCliente(cliente);
-        chamado.setPrioridade(Prioridade.toEnum(obj.getPrioridade()));
-        chamado.setStatus(Status.toEnum(obj.getStatus()));
-        chamado.setTitulo(obj.getTitulo());
-        chamado.setObservacoes(obj.getObservacoes());
+        chamado.setPrioridade(Prioridade.toEnum(objDTO.getPrioridade()));
+        chamado.setStatus(Status.toEnum(objDTO.getStatus()));
+        chamado.setTitulo(objDTO.getTitulo());
+        chamado.setObservacoes(objDTO.getObservacoes());
         return chamado;
     }
 }

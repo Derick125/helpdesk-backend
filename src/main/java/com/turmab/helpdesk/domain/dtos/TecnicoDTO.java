@@ -6,11 +6,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.turmab.helpdesk.domain.Tecnico;
 import com.turmab.helpdesk.domain.enums.Perfil;
 
+/**
+ * DTO para a entidade Tecnico.
+ * Expõe os dados de Tecnico de forma segura, omitindo a lista de chamados
+ * para evitar referências circulares e a senha em respostas de listagem.
+ */
 public class TecnicoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -35,8 +39,13 @@ public class TecnicoDTO implements Serializable {
 
     public TecnicoDTO() {
         super();
+        addPerfil(Perfil.TECNICO);
     }
 
+    /**
+     * Construtor que converte uma entidade Tecnico em um TecnicoDTO.
+     * @param obj A entidade Tecnico a ser convertida.
+     */
     public TecnicoDTO(Tecnico obj) {
         super();
         this.id = obj.getId();
@@ -46,6 +55,7 @@ public class TecnicoDTO implements Serializable {
         this.senha = obj.getSenha();
         this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
         this.dataCriacao = obj.getDataCriacao();
+        addPerfil(Perfil.TECNICO);
     }
 
     // GETTERS E SETTERS
@@ -60,7 +70,7 @@ public class TecnicoDTO implements Serializable {
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
     public Set<Perfil> getPerfis() { return perfis.stream().map(Perfil::toEnum).collect(Collectors.toSet()); }
-    public void addPerfil(Perfil perfil) { this.perfis.add(perfil.getCodigo());}
+    public void addPerfil(Perfil perfil) { this.perfis.add(perfil.getCodigo()); }
     public LocalDate getDataCriacao() { return dataCriacao; }
     public void setDataCriacao(LocalDate dataCriacao) { this.dataCriacao = dataCriacao; }
 }

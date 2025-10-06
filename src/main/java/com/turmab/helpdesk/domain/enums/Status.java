@@ -1,6 +1,10 @@
 package com.turmab.helpdesk.domain.enums;
 
+/**
+ * Enumeração que define os possíveis status de um chamado.
+ */
 public enum Status {
+
     ABERTO(0, "ABERTO"),
     ANDAMENTO(1, "ANDAMENTO"),
     ENCERRADO(2, "ENCERRADO");
@@ -21,6 +25,12 @@ public enum Status {
         return descricao;
     }
 
+    /**
+     * Converte um código numérico para uma instância do enum Status.
+     * * @param cod O código a ser convertido.
+     * @return O Status correspondente.
+     * @throws IllegalArgumentException se o código não for válido.
+     */
     public static Status toEnum(Integer cod) {
         if (cod == null) {
             return null;
@@ -30,6 +40,6 @@ public enum Status {
                 return x;
             }
         }
-        throw new IllegalArgumentException("Status Inválido");
+        throw new IllegalArgumentException("Status Inválido: " + cod);
     }
 }

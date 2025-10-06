@@ -1,6 +1,10 @@
 package com.turmab.helpdesk.domain.enums;
 
+/**
+ * Enumeração que define os níveis de prioridade de um chamado.
+ */
 public enum Prioridade {
+
     BAIXA(0, "BAIXA"),
     MEDIA(1, "MEDIA"),
     ALTA(2, "ALTA");
@@ -21,6 +25,12 @@ public enum Prioridade {
         return descricao;
     }
 
+    /**
+     * Converte um código numérico para uma instância do enum Prioridade.
+     * * @param cod O código a ser convertido.
+     * @return A Prioridade correspondente.
+     * @throws IllegalArgumentException se o código não for válido.
+     */
     public static Prioridade toEnum(Integer cod) {
         if (cod == null) {
             return null;
@@ -30,6 +40,6 @@ public enum Prioridade {
                 return x;
             }
         }
-        throw new IllegalArgumentException("Prioridade Inválida");
+        throw new IllegalArgumentException("Prioridade Inválida: " + cod);
     }
 }

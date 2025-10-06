@@ -10,6 +10,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.turmab.helpdesk.domain.Cliente;
 import com.turmab.helpdesk.domain.enums.Perfil;
 
+/**
+ * DTO para a entidade Cliente.
+ * Expõe os dados de Cliente de forma segura, omitindo a lista de chamados
+ * para evitar referências circulares e a senha em respostas de listagem.
+ */
 public class ClienteDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -37,6 +42,10 @@ public class ClienteDTO implements Serializable {
         addPerfil(Perfil.CLIENTE);
     }
 
+    /**
+     * Construtor que converte uma entidade Cliente em um ClienteDTO.
+     * @param obj A entidade Cliente a ser convertida.
+     */
     public ClienteDTO(Cliente obj) {
         super();
         this.id = obj.getId();

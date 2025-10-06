@@ -6,6 +6,11 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.turmab.helpdesk.domain.Chamado;
 
+/**
+ * DTO (Data Transfer Object) para a entidade Chamado.
+ * Utilizado para transferir dados de chamados entre as camadas da aplicação,
+ * especialmente entre o backend e o frontend, de forma controlada e segura.
+ */
 public class ChamadoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -30,10 +35,10 @@ public class ChamadoDTO implements Serializable {
     private String observacoes;
     
     @NotNull(message = "O campo TÉCNICO é requerido")
-    private Integer tecnico;
+    private Integer tecnico; // Armazena apenas o ID do técnico
     
     @NotNull(message = "O campo CLIENTE é requerido")
-    private Integer cliente;
+    private Integer cliente; // Armazena apenas o ID do cliente
     
     private String nomeTecnico;
     private String nomeCliente;
@@ -42,6 +47,10 @@ public class ChamadoDTO implements Serializable {
         super();
     }
 
+    /**
+     * Construtor que converte uma entidade Chamado em um ChamadoDTO.
+     * @param obj A entidade Chamado a ser convertida.
+     */
     public ChamadoDTO(Chamado obj) {
         this.id = obj.getId();
         this.dataAbertura = obj.getDataAbertura();

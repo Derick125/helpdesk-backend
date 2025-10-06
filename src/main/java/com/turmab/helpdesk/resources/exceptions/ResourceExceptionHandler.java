@@ -6,13 +6,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-// Adicione a importação da nova exceção
+// A LINHA DE IMPORT CORRETA É ESTA:
 import com.turmab.helpdesk.resources.exceptions.DataIntegrityViolationException;
 
+/**
+ * Manipulador de exceções global para a aplicação.
+ * A anotação @ControllerAdvice permite que esta classe intercepte exceções
+ * lançadas por qualquer @RestController e as trate de forma centralizada.
+ */
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
-    // Este método você já tem e está correto
+    /**
+     * Manipula a exceção {@link ObjectNotFoundException}.
+     * Retorna uma resposta HTTP com status 404 (Not Found) e um corpo
+     * padronizado com os detalhes do erro.
+     *
+     * @param ex A exceção lançada.
+     * @param request A requisição HTTP que causou o erro.
+     * @return Um ResponseEntity com o status e o corpo do erro.
+     */
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<StandardError> objectNotFoundException(ObjectNotFoundException ex,
             HttpServletRequest request) {
@@ -23,7 +36,15 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
     
-    // ADICIONE ESTE NOVO MÉTODO
+    /**
+     * Manipula a exceção {@link DataIntegrityViolationException}.
+     * Retorna uma resposta HTTP com status 400 (Bad Request) e um corpo
+     * padronizado com os detalhes do erro.
+     *
+     * @param ex A exceção lançada.
+     * @param request A requisição HTTP que causou o erro.
+     * @return Um ResponseEntity com o status e o corpo do erro.
+     */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<StandardError> dataIntegrityViolationException(DataIntegrityViolationException ex,
             HttpServletRequest request) {
